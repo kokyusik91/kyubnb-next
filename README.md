@@ -72,3 +72,15 @@ npm install -D prisma
 ```shell
 npx prisma init
 ```
+
+## 5. Auth 구현 (로그인, 회원가입 with Next-auth) 과정
+
+1. Prisma를 사용해서 DB Schema를 만든다. (/prisma/schema.prisma 참고)
+2. next-auth를 사용하기 위해서 어쩔수 없이 `pages 디렉토리`를 만든다. (사용하기 위해 어쩔 수 없었음)
+3. `/page/api/auth/[...nextauth].ts`에 next-auth 관련 로직을 넣어준다. (이게 복잡함.... 🥲)
+4. /app/api/register/route.ts에 POST요청인 회원가입 로직을 넣는다 (DB에 신규 유저 생성 with prisma), 실제 회원가입 API를 만드는 과정.
+5. `Signup`과는 다르게 `Login`은 `credentials`라는 것을 사용([...nextauth]에 선언되어있는)해서 로그인 로직 및 onSumbit핸들러를 작성한다.
+6. ServerComponent의 특성을 이용하여 로그인 한 유저정보를 DB에서 다이렉트로 가져온다. (서버 컴포넌트이니깐 가능한점!!) 이렇게 되면 API 콜을 안해도된다는 이점이 있다!!
+7. 서버 컴포넌트에서 가져온 `currentUser`를 클라이언트 컴포넌트에 props로 넘겨준다! 🥰
+8. 가져온 유저정보로 로그인시 보여줄 메뉴들을 조건부 렌더링 하여 보여줄 수 있다.
+9. 로그아웃은 `next-auth`의 signOut 함수만 호출하면 자동으로 로그아웃이 된다. (엄청 편함.)
