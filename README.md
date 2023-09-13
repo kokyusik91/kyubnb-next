@@ -58,3 +58,17 @@ return (
 
 - `ClientOnly` 래퍼 컴포넌트를 만들어서 하이드레이션 에러가 나지 않게했다. 오직 클라이언트 컴포넌트에서만 랜더링
 - `react-hot-toast`를 설치해서 `ClientOnly` 래퍼 컴포넌트안에서 Provider로 선언하여 사용하고 있다.
+
+## 4. prisma 셋팅
+
+### prisma 설치
+
+```shell
+npm install -D prisma
+```
+
+### prisma 시작
+
+```shell
+npx prisma init
+```
