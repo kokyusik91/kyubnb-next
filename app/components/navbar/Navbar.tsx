@@ -1,14 +1,15 @@
 'use client';
 
 // npx prisma db push를 하게 되면 prisma 스키마를 사용가능하다.
-import { User } from '@prisma/client';
 import Container from '../Container';
 import Logo from './Logo';
 import Search from './Search';
 import UserMenu from './UserMenu';
 
+import { SafeUser } from '@/app/types';
+
 interface NavBarProps {
-  currentUser?: User | null;
+  currentUser?: SafeUser | null;
 }
 
 function NavBar({ currentUser }: NavBarProps) {
