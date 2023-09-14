@@ -2,6 +2,7 @@
 
 // npx prisma db push를 하게 되면 prisma 스키마를 사용가능하다.
 import Container from '../Container';
+import Categories from './Categories';
 import Logo from './Logo';
 import Search from './Search';
 import UserMenu from './UserMenu';
@@ -25,6 +26,7 @@ function NavBar({ currentUser }: NavBarProps) {
           </div>
         </Container>
       </div>
+      <Categories/>
     </div>
   );
 }
