@@ -84,3 +84,109 @@ npx prisma init
 7. 서버 컴포넌트에서 가져온 `currentUser`를 클라이언트 컴포넌트에 props로 넘겨준다! 🥰
 8. 가져온 유저정보로 로그인시 보여줄 메뉴들을 조건부 렌더링 하여 보여줄 수 있다.
 9. 로그아웃은 `next-auth`의 signOut 함수만 호출하면 자동으로 로그아웃이 된다. (엄청 편함.)
+
+## 6. 카테고리 선택 구현
+
+1. 카테고리 버튼(beach, windMills, Modern)을 클릭했을때, url 창에 `url?category='뭐시기'` 이런식으로 페이지가 이동(`router.push`` 사용)되록 만든다.
+2. 해당 카테고리 버튼을 한번 더 누르게 되면 query String을 지운다.
+3. 카테고리 버튼의 `label`과 url queryString의 category값과 같은지 비교해서 props로 넘기는 방식
+
+1번, 3번 구현
+
+```ts
+const handleClick = useCallback(() => {
+  let currentQuery = {};
+
+  if (params) {
+    currentQuery = qs.parse(params.toString());
+  }
+
+  console.log('현재 쿼리', currentQuery);
+
+  const updateQuery: any = {
+    ...currentQuery,
+    category: label,
+  };
+  // 현재 쿼리 스트링의 category 값과 누른 label이 같으면 쿼리 삭제
+  if (params?.get('category') === label) {
+    delete updateQuery.category;
+  }
+
+  // 실제로 이동시킬 쿼리 생성
+  const url = qs.stringifyUrl(
+    {
+      url: '/',
+      query: updateQuery,
+    },
+    { skipNull: true }
+  );
+  // 실제로 이동시킴
+  router.push(url);
+}, [label, params, router]);
+```
+
+## 7. 예약 Form 모달 만들기 RentModal (살짝 hard함)
+
+1. 컨셉은 우리가 회원가입하는 화면처럼 step1 ~ step6 까지 넘기면서 마지막에 제출하는 방식
+2. step1 ~ step6까지의 화면이 바뀌게 하는것은 bodyContent를 let으로 선언한 후 재할당 하는 방식으로 화면을 변경해줌 + Enum
+
+```ts
+enum STEPS {
+  CATEGORY = 0,
+  LOCATION = 1,
+  INFO = 2,
+  IMAGES = 3,
+  DESCRIPTION = 4,
+  PRICE = 5,
+}
+```
+
+3. form의 state는 react-hook-form을 사용한다.
+4. Step1은 `<CategoryInput/>`에 map을 이용하여, 리스팅 해준다. 여기서 react-hook-form 사용법을 익혀야할듯 하다.
+5. Step2는 `react-select`와 `world-countries`를 사용하여, 전 세계 나라들을 select ui로 보여준다.
+6. `useCountries`라는 커스텀 훅을 만들어, 해당 나라들을 가져오는 Select UI를 만듬<br/>
+   예시코드)
+
+```ts
+import countries from 'world-countries';
+
+const formattedCountries = countries.map((country) => ({
+  value: country.cca2,
+  label: country.name.common,
+  flag: country.flag,
+  latlng: country.latlng,
+  region: country.region,
+}));
+
+const useCountries = () => {
+  const getAll = () => formattedCountries;
+
+  const getByValue = (value: string) => {
+    return formattedCountries.find((item) => item.value === value);
+  };
+
+  return {
+    getAll,
+    getByValue,
+  };
+};
+
+export default useCountries;
+```
+
+⭐️ **제일 중요한건 react-hook-form으로 form 데이터를 관리하고, 뒤로갔다 앞으로 갔다하더라도 state가 유지되는것!**
+
+## 7.1 leaflet이라는 라이브러리를 사용하여 지도 띄우기
+
+1. 지도를 next.js의 dynamic import로 가져오는게 유의할 사항!
+
+## 8. 위 7번 구현하기 위해 설치한 패캐지
+
+```shell
+npm install query-string
+npm install leaflet
+npm install @types/leaflet
+npm install react-leaflet
+npm install world-countries
+npm install react-select
+```
