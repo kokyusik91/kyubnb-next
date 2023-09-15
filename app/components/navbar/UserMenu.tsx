@@ -23,11 +23,23 @@ function UserMenu({ currentUser }: UserMenuProps) {
     setIsOpen((prev) => !prev);
   }, []);
 
+  /**
+   * 로그인 유무에 (currentUser) 다른 함수 실행!
+   */
+  const onRent = useCallback(()=>{
+    if(!currentUser){
+      // 함수 실행을 return 한다.
+      return loginModal.onOpen()
+    }
+
+    // Open Rent Modal
+  },[currentUser, loginModal])
+
   return (
     <div className='relative'>
       <div className='flex flex-row items-center gap-3'>
         <div
-          onClick={() => {}}
+          onClick={onRent}
           className='hidden md:block text-sm font-semibold py-3 px-4 rounded-full hover:bg-neutral-100 transition cursor-pointer'
         >
           Airbnb your home
