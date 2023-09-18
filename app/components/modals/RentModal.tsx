@@ -45,7 +45,7 @@ function RentModal() {
       description: '',
     },
   });
-
+  // React Hook Form 에서 계속 값을 추적하고 있는듯 하다.
   const category = watch('category');
   const location = watch('location');
 
