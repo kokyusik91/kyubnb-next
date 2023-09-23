@@ -73,8 +73,8 @@ function ListingClient({
       .then(() => {
         toast.success('Listing reserved!');
         setDateRange(initialDateRange);
-        // Redirect to /trips
-        router.refresh();
+        // 얘약 하면 trips 페이지로 이동하도록 만듬.
+        router.push('/trips');
       })
       .catch(() => {
         toast.error('Something went wrong');
