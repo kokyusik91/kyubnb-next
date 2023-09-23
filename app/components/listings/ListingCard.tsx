@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import { Listing, Reservation } from '@prisma/client';
 import Image from 'next/image';
 
-import { SafeUser, safeListings } from '@/app/types';
+import { SafeReservations, SafeUser, SafeListing } from '@/app/types';
 import useCountries from '@/app/hooks/useCountries';
 import { useCallback, useMemo } from 'react';
 import format from 'date-fns/format';
@@ -12,8 +12,8 @@ import HeartButton from '../HeartButton';
 import Button from '../Button';
 
 interface ListingCardProps {
-  data: safeListings;
-  reservation?: Reservation;
+  data: SafeListing;
+  reservation?: SafeReservations;
   onAction?: (id: string) => void;
   disabled?: boolean;
   actionLabel?: string;
@@ -50,10 +50,11 @@ function ListingCard({
   );
 
   const price = useMemo(() => {
+    // 예약이 있다면, 예약된 가격을 보여준다.
     if (reservation) {
       return reservation.totalPrice;
     }
-
+    // 아니면 그냥 박 당 가격을 보여준다.
     return data.price;
   }, [reservation, data.price]);
 
