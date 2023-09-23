@@ -17,7 +17,7 @@ import { signIn } from 'next-auth/react';
 
 function RegisterModal() {
   const registerModal = useRegisterModal();
-  const loginModal = useLoginModal()
+  const loginModal = useLoginModal();
   const [isLoading, setIsLoading] = useState(false);
 
   const {
@@ -39,6 +39,7 @@ function RegisterModal() {
       .post('/api/register', data)
       .then(() => {
         registerModal.onClose();
+        loginModal.onOpen();
       })
       .catch((error: unknown) => {
         toast.error('Something Went Wrong');
@@ -48,11 +49,10 @@ function RegisterModal() {
       });
   };
 
-
-  const toggle = useCallback(()=>{
+  const toggle = useCallback(() => {
     registerModal.onClose();
-    loginModal.onOpen()
-  },[loginModal, registerModal])
+    loginModal.onOpen();
+  }, [loginModal, registerModal]);
 
   const bodyContent = (
     <div className='flex flex-col gap-4'>
